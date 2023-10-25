@@ -38,13 +38,12 @@ def logout():
 def authorized():
     response = github.authorized_response()
     if response is None or response.get('access_token') is None:
-        return 'Access denied: reason={} error={}'.format(
-            request.args['error_reason'],
-            request.args['error_description']
-        )
-
+        error_reason = request.args.get('error_reason', 'No reason provided')
+        error_description = request.args.get('error_description', 'No description provided')
+        return f'Access denied: reason={error_reason} error={error_description}'
+    
     session['github_token'] = (response['access_token'], '')
-    return redirect(url_for('index'))
+    return redirect(url_for('authorized'))
 
 @github.tokengetter
 def get_github_oauth_token():
