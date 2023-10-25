@@ -73,7 +73,7 @@ def authorized():
 
 @app.route('/authorized_success')
 def authorized_success():
-    return render_template('authorized.html', token=session.get('github_token')[0])
+    return render_template('authorized.html', token=session.get('github_token')[0], user_db_id=session['user_id'])
 
 
 @github.tokengetter
