@@ -50,9 +50,6 @@ def authorized_success():
     return render_template('authorized.html', token=session.get('github_token')[0])
 
 
-
-
-
 @github.tokengetter
 def get_github_oauth_token():
     return session.get('github_token')
