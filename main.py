@@ -1,4 +1,4 @@
-from flask import Flask, redirect, url_for, session, request
+from flask import Flask, render_template, redirect, url_for, session, request
 from flask_oauthlib.client import OAuth
 import os
 
@@ -22,7 +22,8 @@ github = oauth.remote_app(
 
 @app.route('/')
 def index():
-    return 'Welcome to the OAuth demo. <a href="/login">Login with GitHub</a>'
+    return render_template('index.html')  # Change this line to use render_template
+
 
 @app.route('/login')
 def login():
