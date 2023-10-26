@@ -1,3 +1,6 @@
 .env
 python_utopian_venv/
 instance/
+__pycache__/
+*.pyc
+*.pyo
