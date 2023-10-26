@@ -20,8 +20,8 @@ class User(db.Model):
 oauth = OAuth(app)  # Initialize OAuth with Authlib
 
 oauth.register('github',
-    client_id='843d2c55ae8ae77a0598',
-    client_secret='49f12611eb5507da82dd2972c263d2ac4612b9c4',
+    client_id=os.environ.get('GITHUB_CLIENT_ID'),
+    client_secret=os.environ.get('GITHUB_CLIENT_SECRET'),
     request_token_params={'scope': 'user:email'},
     base_url='https://api.github.com/',
     access_token_url='https://github.com/login/oauth/access_token',
