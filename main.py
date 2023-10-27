@@ -1,15 +1,18 @@
 from flask import Flask, render_template, redirect, url_for, session, request
 from flask_sqlalchemy import SQLAlchemy
 from rag_module import initialize_rag_chain
-from authlib.integrations.flask_client import OAuth
+from config import load_config
+from auth import configure_oauth 
 
 import os
 import dotenv
 dotenv.load_dotenv()
 
+config = load_config()
+
 app = Flask(__name__)
-app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'fallback_if_not_found')
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
+app.config['SECRET_KEY'] = config['secret_key']
+app.config['SQLALCHEMY_DATABASE_URI'] = config['sqlalchemy_database_uri']
 
 db = SQLAlchemy(app)
 
@@ -19,14 +22,7 @@ class User(db.Model):
 
 oauth = OAuth(app)  # Initialize OAuth with Authlib
 
-oauth.register('github',
-    client_id=os.environ.get('GITHUB_CLIENT_ID'),
-    client_secret=os.environ.get('GITHUB_CLIENT_SECRET'),
-    request_token_params={'scope': 'user:email'},
-    base_url='https://api.github.com/',
-    access_token_url='https://github.com/login/oauth/access_token',
-    authorize_url='https://github.com/login/oauth/authorize',
-)
+oauth = configure_oauth(app, config)  
 
 # Initialize the RAG chain
 rag_chain = initialize_rag_chain()
