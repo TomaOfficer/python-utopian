@@ -15,7 +15,7 @@ def configure_oauth(app, config):
     oauth.register('google',
         client_id=config['google_client_id'],
         client_secret=config['google_client_secret'],
-        request_token_params={'scope': 'email'},
+        request_token_params={'scope': 'https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile'},
         base_url='https://www.googleapis.com/oauth2/v1/',
         access_token_url='https://accounts.google.com/o/oauth2/token',
         authorize_url='https://accounts.google.com/o/oauth2/auth'
