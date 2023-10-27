@@ -1,4 +1,9 @@
 Flask>=2.2.5
-Flask-OAuthlib==0.9.6
+Authlib
 Werkzeug==2.2.2
 Flask-SQLAlchemy==3.1.1
+openai==0.28.1
+langchain==0.0.323
+chromadb
+langchainhub
+tiktoken
