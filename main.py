@@ -1,6 +1,6 @@
 from flask import Flask, render_template, redirect, url_for, session, request
 from flask_sqlalchemy import SQLAlchemy
-from rag_module import initialize_rag_chain
+from rag_gdrive import initialize_rag_chain
 from config import load_config
 from auth import configure_oauth 
 
@@ -18,9 +18,8 @@ db = SQLAlchemy(app)
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    github_id = db.Column(db.String(50), unique=True)
-
-oauth = OAuth(app)  # Initialize OAuth with Authlib
+    oauth_id = db.Column(db.String(50), unique=True)
+    oauth_provider = db.Column(db.String(20))
 
 oauth = configure_oauth(app, config)  
 
@@ -34,20 +33,17 @@ print(result)
 def index():
     return render_template('index.html') 
 
-@app.route('/login')
-def login():
-    redirect_uri = url_for('authorized', _external=True)
+# Github login route
+@app.route('/login_github')
+def login_github():
+    redirect_uri = url_for('authorized_github', _external=True)
     return oauth.github.authorize_redirect(redirect_uri)
 
-@app.route('/logout')
-def logout():
-    session.pop('github_token')
-    return redirect(url_for('index'))
-
-
-@app.route('/login/authorized')
-def authorized():
+@app.route('/login_github/authorized')
+def authorized_github():
     token = oauth.github.authorize_access_token()
+    if not token:
+        return redirect(url_for('error'))
     resp = oauth.github.get('https://api.github.com/user')
     profile = resp.json()
     github_id = str(profile['id'])
@@ -63,9 +59,45 @@ def authorized():
 
     return redirect(url_for('authorized_success'))
 
+# Google login route
+@app.route('/login_google')
+def login_google():
+    redirect_uri = url_for('authorized_google', _external=True)
+    return oauth.google.authorize_redirect(redirect_uri)  # Note: Using 'google' here
+
+@app.route('/login_google/authorized')
+def authorized_google():
+    token = oauth.google.authorize_access_token()
+    if not token:
+        return redirect(url_for('error'))
+    resp = oauth.google.get('https://www.googleapis.com/oauth2/v2/userinfo')
+    profile = resp.json()
+    google_id = str(profile['id'])
+
+    user = User.query.filter_by(oauth_id=google_id, oauth_provider='google').first()
+
+    if user is None:
+        new_user = User(oauth_id=google_id, oauth_provider='google')
+        db.session.add(new_user)
+        db.session.commit()
+
+    session['user_id'] = google_id
+
+    return redirect(url_for('authorized_success'))
+
+@app.route('/error')
+def error():
+    return render_template('error.html')
+
 @app.route('/authorized_success')
 def authorized_success():
     return render_template('authorized.html', user_db_id=session['user_id'])
+
+@app.route('/logout')
+def logout():
+    session.pop('github_token', None)  # Clear GitHub token if it exists
+    session.pop('google_token', None)  # Clear Google token if it exists
+    return redirect(url_for('index'))
 
 if __name__ == '__main__':
     with app.app_context():
