@@ -5,6 +5,8 @@ from config import load_config
 from auth import configure_oauth 
 
 import os
+print("Current Working Directory:", os.getcwd())
+
 import dotenv
 dotenv.load_dotenv()
 
@@ -23,10 +25,10 @@ class User(db.Model):
 
 oauth = configure_oauth(app, config)  
 
-# Initialize the RAG chain
-rag_chain = initialize_rag_chain()
-result = rag_chain.invoke("What is Task Decomposition?")
-print(result)
+# # Initialize the RAG chain
+# rag_chain = initialize_rag_chain()
+# result = rag_chain.invoke("What is Task Decomposition?")
+# print(result)
 
 # -- Routes --
 @app.route('/')
@@ -48,14 +50,14 @@ def authorized_github():
     profile = resp.json()
     github_id = str(profile['id'])
 
-    user = User.query.filter_by(github_id=github_id).first()
+    user = User.query.filter_by(oauth_id=github_id, oauth_provider='github').first()
 
     if user is None:
-        new_user = User(github_id=github_id)
+        new_user = User(oauth_id=github_id, oauth_provider='github')
         db.session.add(new_user)
         db.session.commit()
 
-    session['user_id'] = github_id
+    session['user_id'] = {'id': github_id, 'provider': 'github'}
 
     return redirect(url_for('authorized_success'))
 
@@ -63,7 +65,7 @@ def authorized_github():
 @app.route('/login_google')
 def login_google():
     redirect_uri = url_for('authorized_google', _external=True)
-    return oauth.google.authorize_redirect(redirect_uri)  # Note: Using 'google' here
+    return oauth.google.authorize_redirect(redirect_uri) 
 
 @app.route('/login_google/authorized')
 def authorized_google():
