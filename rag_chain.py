@@ -1,8 +1,8 @@
 def initialize_rag_chain():
 
     # Load documents
-    from langchain.document_loaders import WebBaseLoader
-    loader = WebBaseLoader("https://lilianweng.github.io/posts/2023-06-23-agent/")
+    from langchain.document_loaders.csv_loader import CSVLoader
+    loader = CSVLoader(file_path='example_data/budget-breakdown.csv')
 
     # Split documents
     from langchain.text_splitter import RecursiveCharacterTextSplitter
@@ -32,7 +32,7 @@ def initialize_rag_chain():
         | llm 
     )
 
-    rag_chain.invoke("What is Task Decomposition?")
+    rag_chain.invoke("What is the biggest category of expense?")
     
     rag_chain = (
         {"context": retriever, "question": RunnablePassthrough()} 

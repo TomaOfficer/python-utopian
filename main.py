@@ -1,6 +1,6 @@
-from flask import Flask, render_template, redirect, url_for, session, request
+from flask import Flask, render_template, redirect, url_for, session
 from flask_sqlalchemy import SQLAlchemy
-from rag_gdrive import initialize_rag_chain
+from rag_chain import initialize_rag_chain
 from config import load_config
 from auth import configure_oauth 
 
@@ -27,7 +27,7 @@ oauth = configure_oauth(app, config)
 
 # # Initialize the RAG chain
 rag_chain = initialize_rag_chain()
-result = rag_chain.invoke("What is Task Decomposition?")
+result = rag_chain.invoke("What is the biggest category of expense?")
 print(result)
 
 # -- Routes --
