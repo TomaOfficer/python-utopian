@@ -1,11 +1,8 @@
-def initialize_rag_chain(google_folder_id, google_token_path):
+def initialize_rag_chain():
 
     # Load documents
-    from langchain.document_loaders import GoogleDriveLoader
-
-    # Load documents
-    # from langchain.document_loaders import WebBaseLoader
-    # loader = WebBaseLoader("https://lilianweng.github.io/posts/2023-06-23-agent/")
+    from langchain.document_loaders import WebBaseLoader
+    loader = WebBaseLoader("https://lilianweng.github.io/posts/2023-06-23-agent/")
 
     # Split documents
     from langchain.text_splitter import RecursiveCharacterTextSplitter

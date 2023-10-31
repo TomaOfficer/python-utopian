@@ -26,9 +26,9 @@ class User(db.Model):
 oauth = configure_oauth(app, config)  
 
 # # Initialize the RAG chain
-# rag_chain = initialize_rag_chain()
-# result = rag_chain.invoke("What is Task Decomposition?")
-# print(result)
+rag_chain = initialize_rag_chain()
+result = rag_chain.invoke("What is Task Decomposition?")
+print(result)
 
 # -- Routes --
 @app.route('/')
