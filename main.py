@@ -1,11 +1,11 @@
 from flask import Flask, render_template, redirect, url_for, session, current_app
 from flask_sqlalchemy import SQLAlchemy
 from rag_chain import initialize_rag_chain
+from langchain_csv_agent import initialize_langchain_csv_agent
 from config import load_config
 from auth import configure_oauth
 import os
 import dotenv
-import pandas as pd
 
 # Initialization of dotenv and configuration
 dotenv.load_dotenv()
@@ -21,11 +21,10 @@ app.config['SQLALCHEMY_DATABASE_URI'] = config['sqlalchemy_database_uri']
 # Database setup
 db = SQLAlchemy(app)
 
-# Create pandas dataframe(sp?)
-df = pd.read_csv('example_data/budget-breakdown.csv')
-
-df.head()
-print(df)
+# Use pandas to read in the .csv to take a peek at it
+# df = pd.read_csv('example_data/budget-breakdown.csv')
+# df.head()
+# print(df)
 
 # OAuth configuration
 oauth = configure_oauth(app, config) 
@@ -121,6 +120,7 @@ if __name__ == '__main__':
         # Create tables and perform any initialization that requires app context
         db.create_all()
 
+        langchain_agent = initialize_langchain_csv_agent()
         # Example of logging within app context
         # try:
         #     rag_chain = initialize_rag_chain()
