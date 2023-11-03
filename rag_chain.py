@@ -3,11 +3,14 @@ def initialize_rag_chain():
     # Load documents
     from langchain.document_loaders.csv_loader import CSVLoader
     loader = CSVLoader(file_path='example_data/budget-breakdown.csv')
+    documents = loader.load()
+    print("Loaded documents:", documents)  # Debug print
 
     # Split documents
     from langchain.text_splitter import RecursiveCharacterTextSplitter
     text_splitter = RecursiveCharacterTextSplitter(chunk_size = 500, chunk_overlap = 0)
     splits = text_splitter.split_documents(loader.load())
+    print("Document splits:", splits)  # Debug print
 
     # Embed and store splits
     from langchain.vectorstores import Chroma

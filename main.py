@@ -1,41 +1,56 @@
-from flask import Flask, render_template, redirect, url_for, session
+from flask import Flask, render_template, redirect, url_for, session, current_app
 from flask_sqlalchemy import SQLAlchemy
 from rag_chain import initialize_rag_chain
 from config import load_config
-from auth import configure_oauth 
-
+from auth import configure_oauth
 import os
-print("Current Working Directory:", os.getcwd())
-
 import dotenv
+import pandas as pd
+
+# Initialization of dotenv and configuration
 dotenv.load_dotenv()
 
+# Configuration
 config = load_config()
 
+# Flask app instantiation
 app = Flask(__name__)
 app.config['SECRET_KEY'] = config['secret_key']
 app.config['SQLALCHEMY_DATABASE_URI'] = config['sqlalchemy_database_uri']
 
+# Database setup
 db = SQLAlchemy(app)
 
+# Create pandas dataframe(sp?)
+df = pd.read_csv('example_data/budget-breakdown.csv')
+
+df.head()
+print(df)
+
+# OAuth configuration
+oauth = configure_oauth(app, config) 
+
+# User model definition
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     oauth_id = db.Column(db.String(50), unique=True)
     oauth_provider = db.Column(db.String(20))
 
-oauth = configure_oauth(app, config)  
+# Initialize the RAG chain
+def initialize_rag_chain():
+    try:
+        rag_chain = initialize_rag_chain()
+        result = rag_chain.invoke("What is the biggest category of expense?")
+        current_app.logger.info(f"RAG Chain result: {result}")
+    except Exception as e:
+        current_app.logger.error(f"Error during RAG Chain invocation: {e}")
 
-# # Initialize the RAG chain
-rag_chain = initialize_rag_chain()
-result = rag_chain.invoke("What is the biggest category of expense?")
-print(result)
-
-# -- Routes --
+# Routes
 @app.route('/')
 def index():
     return render_template('index.html') 
 
-# Github login route
+# Github login routes
 @app.route('/login_github')
 def login_github():
     redirect_uri = url_for('authorized_github', _external=True)
@@ -61,7 +76,7 @@ def authorized_github():
 
     return redirect(url_for('authorized_success'))
 
-# Google login route
+# Google login routes
 @app.route('/login_google')
 def login_google():
     redirect_uri = url_for('authorized_google', _external=True)
@@ -97,11 +112,22 @@ def authorized_success():
 
 @app.route('/logout')
 def logout():
-    session.pop('github_token', None)  # Clear GitHub token if it exists
-    session.pop('google_token', None)  # Clear Google token if it exists
+    session.pop('github_token', None)  
+    session.pop('google_token', None) 
     return redirect(url_for('index'))
 
 if __name__ == '__main__':
     with app.app_context():
-        db.create_all() # This line creates the tables based on your SQLAlchemy models
+        # Create tables and perform any initialization that requires app context
+        db.create_all()
+
+        # Example of logging within app context
+        # try:
+        #     rag_chain = initialize_rag_chain()
+        #     result = rag_chain.invoke("What is the biggest category of expense?")
+        #     current_app.logger.info(f"RAG Chain result: {result}")
+        # except Exception as e:
+        #     current_app.logger.error(f"Error during RAG Chain invocation: {e}")
+
+    # Start the Flask app
     app.run(debug=True)
