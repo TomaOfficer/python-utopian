@@ -1,7 +1,7 @@
 from flask import Flask, render_template, redirect, url_for, session, current_app
 from flask_sqlalchemy import SQLAlchemy
 from rag_chain import initialize_rag_chain
-from langchain_csv_agent import initialize_langchain_csv_agent
+# from langchain_csv_agent import initialize_langchain_csv_agent
 from config import load_config
 from auth import configure_oauth
 import os
@@ -120,7 +120,10 @@ if __name__ == '__main__':
         # Create tables and perform any initialization that requires app context
         db.create_all()
 
-        langchain_agent = initialize_langchain_csv_agent()
+        # # Initialize deprecated LangChain CSV agent
+        # langchain_agent = initialize_langchain_csv_agent()
+
+
         # Example of logging within app context
         # try:
         #     rag_chain = initialize_rag_chain()
