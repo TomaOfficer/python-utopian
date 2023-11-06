@@ -1,24 +1,36 @@
-from langchain.agents import load_tools
+from langchain.agents import Tool
 from langchain.agents import initialize_agent
-from langchain.agents import AgentType
-from langchain.llms import OpenAI
+from langchain.chat_models import ChatOpenAI
+from langchain.chains.conversation.memory import ConversationBufferMemory
+from langchain.chains import LLMMathChain
 from dotenv import load_dotenv
 
 load_dotenv()
 
-llm = OpenAI(temperature=0)
+llm = ChatOpenAI(temperature=0, model="gpt-4")
+llm_math = LLMMathChain.from_llm(llm)
 
-tools = load_tools(
-  ["llm-math"], 
-  llm=llm
-)
+tools = [
+  Tool(
+    name="Calculator",
+    description=
+    "Useful for when you need to do math or calculate expressions. Please provide an expression.",
+    func=llm_math.run,
+    return_direct=True)
+]
 
-agent_executor = initialize_agent(
-    tools, llm, agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION, verbose=True
-)
+memory = ConversationBufferMemory(memory_key="chat_history")
+agent_chain = initialize_agent(tools,
+                               llm,
+                               agent="conversational-react-description",
+                               memory=memory)
 
-agent_executor.invoke(
-    {
-        "input": "What is 5 times 2?"
-    }
-)
+# Hardcoded question
+hardcoded_question = "What is 5 times 150?"
+
+# Run the agent chain with the hardcoded question
+answer = agent_chain.run(input=hardcoded_question)
+
+# Print the answer to the console
+print(f"Question: {hardcoded_question}")
+print(f"Answer: {answer}")
