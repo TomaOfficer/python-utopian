@@ -10,3 +10,4 @@ tiktoken
 pandas
 tabulate
 numexpr
+langchain_experimental
