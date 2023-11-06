@@ -3,6 +3,7 @@ from langchain.agents import initialize_agent
 from langchain.chat_models import ChatOpenAI
 from langchain.chains.conversation.memory import ConversationBufferMemory
 from langchain.chains import LLMMathChain
+from langchain_csv_agent import csv_agent_query_function 
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -16,7 +17,13 @@ tools = [
     description=
     "Useful for when you need to do math or calculate expressions. Please provide an expression.",
     func=llm_math.run,
-    return_direct=True)
+    return_direct=True),
+  Tool(
+      name="October 2023 expenses",
+      description="Searches for data pertaining to October 2023 expenses.",
+      func=lambda q: csv_agent_query_function(q),  # Pass the function as a lambda to delay execution
+      return_direct=True
+  )
 ]
 
 memory = ConversationBufferMemory(memory_key="chat_history")
@@ -25,10 +32,10 @@ agent_chain = initialize_agent(tools,
                                agent="conversational-react-description",
                                memory=memory)
 
-# Hardcoded question
-hardcoded_question = "What is 5 times 150?"
+# Hardcoded question for the CSV agent
+hardcoded_question = "What is the total?"
 
-# Run the agent chain with the hardcoded question
+# Run the main agent chain with the hardcoded question
 answer = agent_chain.run(input=hardcoded_question)
 
 # Print the answer to the console
