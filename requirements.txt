@@ -11,3 +11,4 @@ pandas
 tabulate
 numexpr
 langchain_experimental
+llama_index

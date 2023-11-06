@@ -6,6 +6,8 @@ from config import load_config
 from auth import configure_oauth
 import os
 import dotenv
+# from create_knowledge_base import construct_base_from_directory
+
 
 # Initialization of dotenv and configuration
 dotenv.load_dotenv()
@@ -20,6 +22,9 @@ app.config['SQLALCHEMY_DATABASE_URI'] = config['sqlalchemy_database_uri']
 
 # Database setup
 db = SQLAlchemy(app)
+
+# Create knowledge base from directory for llamaindex rag
+# construct_base_from_directory("data")
 
 # Use pandas to read in the .csv to take a peek at it
 # df = pd.read_csv('example_data/budget-breakdown.csv')

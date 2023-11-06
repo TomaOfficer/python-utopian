@@ -3,8 +3,10 @@ from langchain.agents import initialize_agent
 from langchain.chat_models import ChatOpenAI
 from langchain.chains.conversation.memory import ConversationBufferMemory
 from langchain.chains import LLMMathChain
+from llama_index_rag import llama_index_answer_question
 # from langchain_csv_agent import csv_agent_query_function 
 from dotenv import load_dotenv
+import os
 
 load_dotenv()
 
@@ -24,6 +26,12 @@ tools = [
   #     func=lambda q: csv_agent_query_function(q),  # Pass the function as a lambda to delay execution
   #     return_direct=True
   # )
+  Tool(
+      name="Trying Not to Try",
+      description="A book about Wu-wei.",
+      func=lambda q: llama_index_answer_question(q),  # Pass the function as a lambda to delay execution
+      return_direct=True
+  )
 ]
 
 # Conversational agent memory
@@ -43,7 +51,7 @@ agent_chain = initialize_agent(tools,
                                memory=memory)
 
 # Hardcoded question for the CSV agent
-hardcoded_question = "What is 5 times 5?"
+hardcoded_question = ""
 
 # Run the main agent chain with the hardcoded question
 answer = agent_chain.run(input=hardcoded_question)
