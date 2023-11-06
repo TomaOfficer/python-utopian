@@ -9,3 +9,4 @@ langchainhub
 tiktoken
 pandas
 tabulate
+numexpr
