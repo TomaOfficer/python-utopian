@@ -26,16 +26,24 @@ tools = [
   # )
 ]
 
-memory = ConversationBufferMemory(memory_key="chat_history")
+# Conversational agent memory
+memory = ConversationBufferMemory(
+  memory_key="chat_history",
+  k=3,
+  return_messages=True
+  )
+
+# Create agent
 agent_chain = initialize_agent(tools,
                                llm,
-                               agent="conversational-react-description",
+                               agent="chat-conversational-react-description",
                                verbose=True,
                                handle_parsing_errors=True,
+                               max_iterations=3,
                                memory=memory)
 
 # Hardcoded question for the CSV agent
-hardcoded_question = "What are the top three categories of expense that you see in the data? Please just give me the category names that you come up with."
+hardcoded_question = "What is 5 times 5?"
 
 # Run the main agent chain with the hardcoded question
 answer = agent_chain.run(input=hardcoded_question)
