@@ -54,6 +54,32 @@ def initialize_rag_chain():
 def index():
     return render_template('index.html') 
 
+# Linkedin login routes
+@app.route('/login_linkedin')
+def login_linkedin():
+    redirect_uri = url_for('authorized_linkedin', _external=True)
+    return oauth.linkedin.authorize_redirect(redirect_uri, scope='openid profile email')
+
+@app.route('/login_linkedin/authorized')
+def authorized_linkedin():
+    token = oauth.linkedin.authorize_access_token()
+    if not token:
+        return redirect(url_for('error'))
+    resp = oauth.linkedin.get('me')
+    profile = resp.json()
+    linkedin_id = str(profile['id'])
+
+    user = User.query.filter_by(oauth_id=linkedin_id, oauth_provider='linkedin').first()
+
+    if user is None:
+        new_user = User(oauth_id=linkedin_id, oauth_provider='linkedin')
+        db.session.add(new_user)
+        db.session.commit()
+
+    session['user_id'] = {'id': linkedin_id, 'provider': 'linkedin'}
+
+    return redirect(url_for('authorized_success'))
+
 # Github login routes
 @app.route('/login_github')
 def login_github():

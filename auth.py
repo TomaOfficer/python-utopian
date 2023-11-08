@@ -21,5 +21,15 @@ def configure_oauth(app, config):
         authorize_url='https://accounts.google.com/o/oauth2/auth'
     )
 
+    # method call to register the LinkedIn OAuth service with your application
+    oauth.register('linkedin',
+        client_id=config['linkedin_client_id'],
+        client_secret=config['linkedin_client_secret'],
+        request_token_params={'scope': 'openid profile email'},  # Adjust scope if needed
+        base_url='https://api.linkedin.com/v2/',
+        access_token_url='https://www.linkedin.com/oauth/v2/accessToken',
+        authorize_url='https://www.linkedin.com/oauth/v2/authorization'
+    )
+
     return oauth
 
