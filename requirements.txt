@@ -12,3 +12,4 @@ tabulate
 numexpr
 langchain_experimental
 llama_index
+oauthlib=2.1.0
