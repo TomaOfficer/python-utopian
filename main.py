@@ -9,15 +9,6 @@ dotenv.load_dotenv()
 
 app, oauth = create_app()
 
-# Initialize the RAG chain
-def initialize_rag_chain():
-    try:
-        rag_chain = initialize_rag_chain()
-        result = rag_chain.invoke("What is the biggest category of expense?")
-        current_app.logger.info(f"RAG Chain result: {result}")
-    except Exception as e:
-        current_app.logger.error(f"Error during RAG Chain invocation: {e}")
-
 # Routes
 @app.route('/')
 def index():
