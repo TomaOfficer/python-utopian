@@ -8,7 +8,6 @@ import os
 import dotenv
 # from create_knowledge_base import construct_base_from_directory
 
-
 # Initialization of dotenv and configuration
 dotenv.load_dotenv()
 

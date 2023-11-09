@@ -11,3 +11,4 @@ def load_config():
         'linkedin_client_id': os.environ.get('LINKEDIN_CLIENT_ID'),
         'linkedin_client_secret': os.environ.get('LINKEDIN_CLIENT_SECRET'),
     }
+
