@@ -8,10 +8,6 @@ from extensions import db
 from models import User 
 from auth import configure_oauth
 
-# from rag_chain import initialize_rag_chain
-# from langchain_csv_agent import initialize_langchain_csv_agent
-# from create_knowledge_base import construct_base_from_directory
-
 # Initialization of dotenv and configuration
 dotenv.load_dotenv()
 config = load_config()
@@ -21,14 +17,6 @@ app = load_app(config)
 
 # Initialize extensions with app context
 db.init_app(app)
-
-# Create knowledge base from directory for llamaindex rag
-# construct_base_from_directory("data")
-
-# Use pandas to read in the .csv to take a peek at it
-# df = pd.read_csv('example_data/budget-breakdown.csv')
-# df.head()
-# print(df)
 
 # OAuth configuration
 oauth = configure_oauth(app, config) 
@@ -143,17 +131,6 @@ if __name__ == '__main__':
     with app.app_context():
         # Create tables and perform any initialization that requires app context
         db.create_all()
-
-        # # Initialize deprecated LangChain CSV agent
-        # langchain_agent = initialize_langchain_csv_agent()
-
-        # Example of logging within app context
-        # try:
-        #     rag_chain = initialize_rag_chain()
-        #     result = rag_chain.invoke("What is the biggest category of expense?")
-        #     current_app.logger.info(f"RAG Chain result: {result}")
-        # except Exception as e:
-        #     current_app.logger.error(f"Error during RAG Chain invocation: {e}")
 
     # Start the Flask app
     app.run(debug=True)
