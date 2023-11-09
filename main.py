@@ -1,25 +1,13 @@
 import os
 import dotenv
-
-from flask import Flask, render_template, redirect, url_for, session, current_app
-from flask_sqlalchemy import SQLAlchemy
-from config import load_config, load_app
-from extensions import db
-from models import User 
-from auth import configure_oauth
+from flask import render_template, redirect, url_for, session, current_app
+from app_factory import create_app, db
+from models import User
 
 # Initialization of dotenv and configuration
 dotenv.load_dotenv()
-config = load_config()
 
-# Create the Flask app instance
-app = load_app(config)
-
-# Initialize extensions with app context
-db.init_app(app)
-
-# OAuth configuration
-oauth = configure_oauth(app, config) 
+app, oauth = create_app()
 
 # Initialize the RAG chain
 def initialize_rag_chain():
