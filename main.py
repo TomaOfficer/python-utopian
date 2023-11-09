@@ -1,6 +1,6 @@
 import os
 import dotenv
-from flask import render_template, redirect, url_for, session, current_app
+from flask import render_template, redirect, url_for, session
 from app_factory import create_app, db
 from models import User
 
