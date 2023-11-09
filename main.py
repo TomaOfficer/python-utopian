@@ -1,26 +1,26 @@
-from flask import Flask, render_template, redirect, url_for, session, current_app
-from flask_sqlalchemy import SQLAlchemy
-from rag_chain import initialize_rag_chain
-# from langchain_csv_agent import initialize_langchain_csv_agent
-from config import load_config
-from auth import configure_oauth
 import os
 import dotenv
+
+from flask import Flask, render_template, redirect, url_for, session, current_app
+from flask_sqlalchemy import SQLAlchemy
+from config import load_config, load_app
+from extensions import db
+from models import User 
+from auth import configure_oauth
+
+# from rag_chain import initialize_rag_chain
+# from langchain_csv_agent import initialize_langchain_csv_agent
 # from create_knowledge_base import construct_base_from_directory
 
 # Initialization of dotenv and configuration
 dotenv.load_dotenv()
-
-# Configuration
 config = load_config()
 
-# Flask app instantiation
-app = Flask(__name__)
-app.config['SECRET_KEY'] = config['secret_key']
-app.config['SQLALCHEMY_DATABASE_URI'] = config['sqlalchemy_database_uri']
+# Create the Flask app instance
+app = load_app(config)
 
-# Database setup
-db = SQLAlchemy(app)
+# Initialize extensions with app context
+db.init_app(app)
 
 # Create knowledge base from directory for llamaindex rag
 # construct_base_from_directory("data")
@@ -32,12 +32,6 @@ db = SQLAlchemy(app)
 
 # OAuth configuration
 oauth = configure_oauth(app, config) 
-
-# User model definition
-class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    oauth_id = db.Column(db.String(50), unique=True)
-    oauth_provider = db.Column(db.String(20))
 
 # Initialize the RAG chain
 def initialize_rag_chain():
