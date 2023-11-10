@@ -8,7 +8,7 @@ client = OpenAI()
 
 # Upload a file with an "assistants" purpose
 file = client.files.create(
-  file=open("data/tntt.md", "rb"),
+  file=open("data/thomasofficer-resume.md", "rb"),
   purpose='assistants'
 )
 
