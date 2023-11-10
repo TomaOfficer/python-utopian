@@ -6,12 +6,19 @@ from dotenv import load_dotenv
 load_dotenv()
 client = OpenAI()
 
+# Upload a file with an "assistants" purpose
+file = client.files.create(
+  file=open("data/tntt.md", "rb"),
+  purpose='assistants'
+)
+
 # Step 1: Create an Assistant
 assistant = client.beta.assistants.create(
     name="Poetic Programming Assistant",
-    instructions="You are a poetic assistant, skilled in explaining complex programming concepts with creative flair.",
-    tools=[{"type": "code_interpreter"}],
-    model="gpt-4-1106-preview"
+    instructions="You are a helpful chatbot. Use your knowledge base to best respond to customer queries.",
+    tools=[{"type": "code_interpreter"}, {"type": "retrieval"}],
+    model="gpt-4-1106-preview",
+    file_ids=[file.id]
 )
 
 def main():
@@ -48,8 +55,8 @@ def main():
       for message in messages.data:
           if message.role == "assistant":
               for content_item in message.content:
-                if content_item['type'] == 'text':
-                    print(content_item['text']['value'])
+                if content_item.type == 'text':
+                    print(content_item.text.value)
 
       run_steps = client.beta.threads.runs.steps.list(
           thread_id=thread.id,
