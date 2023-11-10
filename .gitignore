@@ -1,5 +1,5 @@
 .env
-python_utopian_venv/
+venv/
 instance/
 __pycache__/
 *.pyc
