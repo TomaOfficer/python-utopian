@@ -2,30 +2,61 @@ import os
 from openai import OpenAI
 from dotenv import load_dotenv
 
+# Load environment variables and initialize OpenAI client
 load_dotenv()
 client = OpenAI()
 
+# Step 1: Create an Assistant
+assistant = client.beta.assistants.create(
+    name="Poetic Programming Assistant",
+    instructions="You are a poetic assistant, skilled in explaining complex programming concepts with creative flair.",
+    tools=[{"type": "code_interpreter"}],
+    model="gpt-4-1106-preview"
+)
+
 def main():
     while True:
-        # Get user input
-        user_input = input("Ask your poetic assistant: ")
+      thread = client.beta.threads.create()
 
-        # Check if the user wants to exit
-        if user_input.lower() == 'exit':
-            print("Goodbye!")
-            break
+      user_input = input("Ask your poetic assistant: ")
+      if user_input.lower() == 'exit':
+          print("Goodbye!")
+          break
 
-        # Create the completion request
-        completion = client.chat.completions.create(
-            model="gpt-3.5-turbo",
-            messages=[
-                {"role": "system", "content": "You are a poetic assistant, skilled in explaining complex programming concepts with creative flair."},
-                {"role": "user", "content": user_input}
-            ]
-        )
+      message_response = client.beta.threads.messages.create(
+          thread_id=thread.id,
+          role="user",
+          content=user_input
+      )
+      print("Message Response:", message_response)  # Debugging
 
-        # Print the response
-        print(completion.choices[0].message.content)
+      run_response = client.beta.threads.runs.create(
+          thread_id=thread.id,
+          assistant_id=assistant.id
+      )
+      print("Run Response:", run_response)  # Debugging
+
+      # Polling for run completion
+      while True:
+          run_status = client.beta.threads.runs.retrieve(
+              thread_id=thread.id,
+              run_id=run_response.id
+          )
+          if run_status.status == 'completed':
+              break
+
+      messages = client.beta.threads.messages.list(thread_id=thread.id)
+      for message in messages.data:
+          if message.role == "assistant":
+              print(message.content)
+
+      run_steps = client.beta.threads.runs.steps.list(
+          thread_id=thread.id,
+          run_id=run_response.id
+      )
+      print("\nRun Steps:")
+      for step in run_steps.data:
+          print(f"Step ID: {step.id}, Type: {step.type}, Status: {step.status}")
 
 if __name__ == "__main__":
     main()
