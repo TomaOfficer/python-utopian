@@ -23,18 +23,17 @@ def main():
           print("Goodbye!")
           break
 
-      message_response = client.beta.threads.messages.create(
+      message = client.beta.threads.messages.create(
           thread_id=thread.id,
           role="user",
           content=user_input
       )
-      print("Message Response:", message_response)  # Debugging
 
       run_response = client.beta.threads.runs.create(
           thread_id=thread.id,
-          assistant_id=assistant.id
+          assistant_id=assistant.id,
+          instructions="Please address the user as Jane Doe. The user has a premium account."
       )
-      print("Run Response:", run_response)  # Debugging
 
       # Polling for run completion
       while True:
@@ -48,13 +47,14 @@ def main():
       messages = client.beta.threads.messages.list(thread_id=thread.id)
       for message in messages.data:
           if message.role == "assistant":
-              print(message.content)
+              for content in message.content:
+                if hasattr(content, 'text'):
+                    print(content.text.value)
 
       run_steps = client.beta.threads.runs.steps.list(
           thread_id=thread.id,
           run_id=run_response.id
       )
-      print("\nRun Steps:")
       for step in run_steps.data:
           print(f"Step ID: {step.id}, Type: {step.type}, Status: {step.status}")
 
