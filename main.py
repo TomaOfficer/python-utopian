@@ -1,8 +1,8 @@
 import os
 import dotenv
 from flask import render_template
-from app_factory import create_app, db
-from auth import auth_blueprint
+from app.app_factory import create_app, db
+from app.auth import auth_blueprint
 
 # Initialization of dotenv and configuration
 dotenv.load_dotenv()

@@ -1,6 +1,6 @@
 from flask import Flask
 from config import Config
-from extensions import db
+from app.extensions import db
 
 def create_app():
     app = Flask(__name__)
@@ -8,7 +8,7 @@ def create_app():
     db.init_app(app)
     
     # Register blueprints or call init_app functions from your other modules here
-    from auth import auth_blueprint
+    from app.auth import auth_blueprint
     app.register_blueprint(auth_blueprint, url_prefix='/auth')
 
     return app
