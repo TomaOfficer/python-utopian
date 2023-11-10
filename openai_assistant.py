@@ -47,9 +47,9 @@ def main():
       messages = client.beta.threads.messages.list(thread_id=thread.id)
       for message in messages.data:
           if message.role == "assistant":
-              for content in message.content:
-                if hasattr(content, 'text'):
-                    print(content.text.value)
+              for content_item in message.content:
+                if content_item['type'] == 'text':
+                    print(content_item['text']['value'])
 
       run_steps = client.beta.threads.runs.steps.list(
           thread_id=thread.id,
