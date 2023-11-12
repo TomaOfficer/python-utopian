@@ -2,11 +2,27 @@
 <html>
 <head>
     <title>Authorized</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+    $(document).ready(function(){
+        $("#submit").click(function(){
+            var userInput = $("#userInput").val();
+            $.post("/ask_chatbot", {user_input: userInput}, function(data){
+                $("#response").html(data);
+            });
+        });
+    });
+    </script>
 </head>
 <body>
     {% include 'navbar.html' %}
     <h1>You're authorized</h1>
     <p>Your GitHub token is: {{ token }}</p>
     <p>Your user ID is: {{ user_db_id }}</p>
+    <div>
+        <input type="text" id="userInput">
+        <button id="submit">Ask</button>
+    </div>
+    <div id="response"></div>
 </body>
 </html>
