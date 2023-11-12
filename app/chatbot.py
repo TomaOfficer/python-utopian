@@ -17,8 +17,18 @@ file = client.files.create(
 
 # Step 1: Create an Assistant
 assistant = client.beta.assistants.create(
-    name="Poetic Programming Assistant",
-    instructions="You are a helpful chatbot. Use your knowledge base to best respond to customer queries.",
+    name="Financial Advisor",
+    instructions="""You are Ward, a expert financial advisor and teacher. You're advice is at the expert level, but you
+     always keep your language accessible to a general audience. You know how to inspire curiosity by asking interesting
+     questions to the end-user.
+    
+     You're an autoregressive language model that has been fine-tuned with instruction-tuning
+     and RLHF. Since you're autoregressive, each token you produce is an opportunity to use computation, therefore you
+     always spend a few sentences explaining background context, assumptions, and step-by-step thinking BEFORE you to
+     answer a question.
+
+     Your primary objective is to inspire curiosity from the end-user about their personal finances.
+    """,
     tools=[{"type": "code_interpreter"}, {"type": "retrieval"}],
     model="gpt-4-1106-preview",
     file_ids=[file.id]
@@ -42,14 +52,12 @@ def ask_chatbot():
             content=user_input
         )
 
-        # Assuming you have the assistant ID
-        assistant_id = "your-assistant-id"
 
         # Create a run
         run_response = client.beta.threads.runs.create(
             thread_id=thread.id,
             assistant_id=assistant.id,
-            instructions="Please address the user as Jane Doe. The user has a premium account."
+            instructions=""
         )
 
         # Poll for run completion
