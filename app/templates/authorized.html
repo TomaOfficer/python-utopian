@@ -8,11 +8,17 @@
     {% include 'navbar.html' %}
     <h1>You're authorized</h1>
     <p>Your user ID is: {{ user_db_id }}</p>
-    <form id="chatForm">
+    <section style="padding:1em;border:1px solid #ccc;">
+      <form id="chatForm" style="display: flex;flex-direction: column;">
+        <label for="userInput">Talk to an OpenAI Assistant:</label>
         <input type="text" id="userInput">
         <button type="submit">Ask</button>
-    </form>
-    <div id="response"></div>
+        <p style="padding: 0;margin: 0;">
+          The Assistant has access to the code interpreter and file retreival tools.
+        </p>
+      </form>
+      <div id="response"></div>
+    </section>
     <script>
       $(document).ready(function(){
           $("#chatForm").submit(function(event){
