@@ -52,7 +52,6 @@ def ask_chatbot():
             content=user_input
         )
 
-
         # Create a run
         run_response = client.beta.threads.runs.create(
             thread_id=thread.id,
@@ -77,6 +76,13 @@ def ask_chatbot():
                 for content_item in message.content:
                     if content_item.type == 'text':
                         chatbot_response += content_item.text.value + "\n"
+
+        run_steps = client.beta.threads.runs.steps.list(
+          thread_id=thread.id,
+          run_id=run_response.id
+        )
+        for step in run_steps.data:
+            print(f"Step ID: {step.id}, Type: {step.type}, Status: {step.status}")
 
         return jsonify({'response': chatbot_response})
     except Exception as e:
