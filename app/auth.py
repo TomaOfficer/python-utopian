@@ -76,6 +76,10 @@ def error():
 def authorized_success():
     return render_template('authorized.html', user_db_id=session['user_id'])
 
+@auth_blueprint.route('/talk-to-assistant')
+def talk_to_assistant():
+    return render_template('talk-to-assistant.html')
+
 @auth_blueprint.route('/logout')
 def logout():
     session.pop('github_token', None)  

@@ -2,44 +2,11 @@
 <html>
 <head>
     <title>Authorized</title>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
     {% include 'navbar.html' %}
     <h1>You're authorized</h1>
     <p>Your user ID is: {{ user_db_id }}</p>
-    <section style="padding:1em;border:1px solid #ccc;">
-      <form id="chatForm" style="display: flex;flex-direction: column;">
-        <label for="userInput">Talk to an OpenAI Assistant:</label>
-        <input type="text" id="userInput">
-        <button type="submit">Ask</button>
-        <p style="padding: 0;margin: 0;">
-          The Assistant has access to the code interpreter and file retreival tools.
-        </p>
-      </form>
-      <div id="response"></div>
-    </section>
-    <script>
-      $(document).ready(function(){
-          $("#chatForm").submit(function(event){
-              event.preventDefault();
-
-              var userInput = $("#userInput").val();
-              console.log("Submitting:", userInput); // For debugging
-
-              $.post("/chatbot/ask_chatbot", {user_input: userInput}, function(data){
-                  if(data.response) {
-                      $("#response").html(data.response);
-                  } else if(data.error) {
-                      $("#response").html("Error: " + data.error);
-                  }
-                  $("#userInput").val(''); // Clear input field after submission
-              }, "json").fail(function(){
-                  $("#response").html("Sorry, there was an error processing your request.");
-              });
-          });
-      });
-    </script>
 </body>
 </html>
