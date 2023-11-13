@@ -134,3 +134,21 @@ def logout():
     session.pop('github_token', None)  
     session.pop('google_token', None) 
     return redirect(url_for('index'))
+
+@auth_blueprint.route('/upload', methods=['POST'])
+def upload_file():
+    if 'user_id' not in session:
+        return redirect(url_for('auth.login'))  # Ensure user is logged in
+
+    file = request.files['file']
+    if file:
+        filename = secure_filename(file.filename)
+        filepath = os.path.join('path/to/upload/folder', filename)
+        file.save(filepath)
+
+        new_file = UserFile(filename=filename, filepath=filepath, user_id=session['user_id']['id'])
+        db.session.add(new_file)
+        db.session.commit()
+
+        return 'File uploaded successfully'
+    return 'No file'
