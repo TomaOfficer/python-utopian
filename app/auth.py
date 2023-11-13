@@ -80,6 +80,10 @@ def authorized_success():
 def talk_to_assistant():
     return render_template('talk-to-assistant.html')
 
+@auth_blueprint.route('/create-context')
+def create_context():
+    return render_template('create-context.html')
+
 @auth_blueprint.route('/logout')
 def logout():
     session.pop('github_token', None)  
