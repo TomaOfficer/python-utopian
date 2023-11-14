@@ -27,9 +27,10 @@ def create_context():
         )
 
         # Parsing the response to extract context requirements
-        context_requirements = response['choices'][0]['message']['content']
-        # Format the output as JSON (or any other desired format)
-        formatted_response = {"required_context": context_requirements}
+        context_requirements = response.choices[0].message.content
+        formatted_response = {"response": context_requirements}  # Define formatted_response
+
+        return jsonify(formatted_response)
 
         return jsonify(formatted_response)
     except Exception as e:
