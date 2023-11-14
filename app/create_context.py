@@ -5,9 +5,9 @@ from flask import Blueprint, request, session, redirect, url_for, jsonify
 # Load environment variables and initialize OpenAI client
 openai.api_key = os.getenv('OPENAI_API_KEY')
 
-chatbot_blueprint = Blueprint('chatbot', __name__)
+context_blueprint = Blueprint('context', __name__)
 
-@chatbot_blueprint.route('/create_context', methods=['POST'])
+@context_blueprint.route('/create_context', methods=['POST'])
 def create_context():
     if 'user_id' not in session:
         return redirect(url_for('index'))
@@ -19,7 +19,7 @@ def create_context():
         
         response = client.chat.completions.create(
             model="gpt-4-1106-preview",
-            termperature=0,
+            temperature=0,
             messages=[
                 {"role": "system", "content": "You are a helpful assistant designed to identify and output the types of context needed to answer a user's question. Context types might include 'Income', 'Dental Health', 'Medical History', etc."},
                 {"role": "user", "content": prompt},
