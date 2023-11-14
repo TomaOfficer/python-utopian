@@ -17,7 +17,7 @@ def create_context():
     try:
         prompt = f"Before you can answer the following question, what context do you need to know about the user? Here is the user's question: {user_input}"
         
-        response = client.chat.completions.create(
+        response = openai.chat.completions.create(
             model="gpt-4-1106-preview",
             temperature=0,
             messages=[

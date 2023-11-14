@@ -16,6 +16,6 @@ def create_app():
     from app.create_context import context_blueprint
     app.register_blueprint(auth_blueprint, url_prefix='/auth')
     app.register_blueprint(chatbot_blueprint, url_prefix='/chatbot')
-    app.register_blueprint(context_blueprint, url_prefix='/create_context')
+    app.register_blueprint(context_blueprint, url_prefix='/context')
 
     return app
