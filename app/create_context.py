@@ -73,4 +73,27 @@ def add_restaurant():
         success_message = "Restaurant added successfully!"
     
     return render_template('create-context.html', form=form, message=success_message)
-  
+
+@context_blueprint.route('/use_restaurant', methods=['POST'])
+@login_required
+def use_restaurant():
+    restaurant_id = request.form.get('restaurant_id')
+    restaurant = Restaurant.query.get(restaurant_id)
+    if restaurant and restaurant.user_id == current_user.id:
+        prompt = f"I'm managing a restaurant named {restaurant.legal_name}, " \
+                 f"which is a {restaurant.business_structure} located at {restaurant.business_address}. " \
+                 f"It has the following nature of business: {restaurant.business_nature}. " \
+                 f"Can you provide some advice on how to improve customer satisfaction?"
+
+        response = openai.ChatCompletion.create(
+            model="gpt-4",
+            messages=[
+                {"role": "system", "content": "You are a knowledgeable assistant providing business advice."},
+                {"role": "user", "content": prompt},
+            ]
+        )
+        chat_response = response.choices[0].message.content if response.choices else "No response received."
+        return jsonify({'response': chat_response})
+
+    else:
+        return jsonify({'error': 'Restaurant not found or access denied'}), 404

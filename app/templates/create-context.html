@@ -36,6 +36,7 @@
                 <th>Owner(s) info</th>
                 <th>Governing law</th>
                 <th>Contact details</th>
+                <th></th>
             </tr>
             {% for restaurant in restaurants %}
                 <tr>
@@ -47,12 +48,16 @@
                     <td>{{ restaurant.owner_info }}</td>
                     <td>{{ restaurant.governing_law }}</td>
                     <td>{{ restaurant.contact_details }}</td>
+                    <td>
+                      <button class="use-restaurant" data-id="{{ restaurant.id }}">Use this Restaurant</button>
+                    </td>
                 </tr>
             {% endfor %}
         </table>
     {% else %}
         <p>No restaurants added yet.</p>
     {% endif %}
+    <div id="restaurant-response"></div>
     </section>
     <section style="padding:1em;border:1px solid #ccc;">
       <form id="chatForm" style="display: flex;flex-direction: column;">
@@ -79,6 +84,16 @@
                   $("#userInput").val(''); // Clear input field after submission
               }, "json").fail(function(){
                   $("#response").html("Sorry, there was an error processing your request.");
+              });
+          });
+          $(".use-restaurant").click(function(){
+              var restaurantId = $(this).data("id");
+              $.post("/context/use_restaurant", {restaurant_id: restaurantId}, function(data){
+                if(data.response) {
+                    $("#restaurant-response").html(data.response); 
+                } else if(data.error) {
+                    $("#restaurant-response").html("Error: " + data.error);
+                }
               });
           });
       });
