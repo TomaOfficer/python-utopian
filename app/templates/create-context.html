@@ -8,7 +8,7 @@
   <body>
     {% include 'navbar.html' %}
     <h1>Context creator</h1>
-    <section style="padding:1em;border:1px solid #ccc;">
+    <section style="padding:1em;margin-bottom: 3em;border:1px solid #ccc;">
       <form method="post" action="{{ url_for('context.add_restaurant') }}">
         {{ form.hidden_tag() }}
         {{ form.legal_name.label }} {{ form.legal_name() }}
