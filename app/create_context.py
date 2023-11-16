@@ -85,8 +85,9 @@ def use_restaurant():
                  f"It has the following nature of business: {restaurant.business_nature}. " \
                  f"Can you provide some advice on how to improve customer satisfaction?"
 
-        response = openai.ChatCompletion.create(
-            model="gpt-4",
+        response = openai.chat.completions.create(
+            model="gpt-4-1106-preview",
+            temperature=0.1,
             messages=[
                 {"role": "system", "content": "You are a knowledgeable assistant providing business advice."},
                 {"role": "user", "content": prompt},
