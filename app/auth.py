@@ -1,7 +1,9 @@
 from flask import Blueprint, redirect, url_for, session, render_template
+from flask_login import login_user, logout_user, current_user, login_required
 from authlib.integrations.flask_client import OAuth
 from app.extensions import db
 from app.models import User
+from app.create_context import RestaurantForm
 
 auth_blueprint = Blueprint('auth', __name__)
 
@@ -46,25 +48,9 @@ def authorized_github():
         new_user = User(oauth_id=github_id, oauth_provider='github')
         db.session.add(new_user)
         db.session.commit()
-
-    session['user_id'] = {'id': github_id, 'provider': 'github'}
-
-    return redirect(url_for('auth.authorized_success'))
-    token = oauth.google.authorize_access_token()
-    if not token:
-        return redirect(url_for('error'))
-    resp = oauth.google.get('https://www.googleapis.com/oauth2/v2/userinfo')
-    profile = resp.json()
-    google_id = str(profile['id'])
-
-    user = User.query.filter_by(oauth_id=google_id, oauth_provider='google').first()
-
-    if user is None:
-        new_user = User(oauth_id=google_id, oauth_provider='google')
-        db.session.add(new_user)
-        db.session.commit()
-
-    session['user_id'] = google_id
+        login_user(new_user)
+    else:
+        login_user(user)
 
     return redirect(url_for('auth.authorized_success'))
 
@@ -81,8 +67,10 @@ def talk_to_assistant():
     return render_template('talk-to-assistant.html')
 
 @auth_blueprint.route('/create-context')
+@login_required
 def create_context():
-    return render_template('create-context.html')
+    form = RestaurantForm() 
+    return render_template('create-context.html', form=form)
 
 @auth_blueprint.route('/logout')
 def logout():

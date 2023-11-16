@@ -9,6 +9,20 @@
     {% include 'navbar.html' %}
     <h1>Context creator</h1>
     <section style="padding:1em;border:1px solid #ccc;">
+      <form method="post" action="{{ url_for('context.add_restaurant') }}">
+        {{ form.hidden_tag() }}
+        {{ form.legal_name.label }} {{ form.legal_name() }}
+        {{ form.business_structure.label }} {{ form.business_structure() }}
+        {{ form.ein.label }} {{ form.ein() }}
+        {{ form.business_address.label }} {{ form.business_address() }}
+        {{ form.business_nature.label }} {{ form.business_nature() }}
+        {{ form.owner_info.label }} {{ form.owner_info() }}
+        {{ form.governing_law.label }} {{ form.governing_law() }}
+        {{ form.contact_details.label }} {{ form.contact_details() }}
+        {{ form.submit() }}
+    </form>
+    </section>
+    <section style="padding:1em;border:1px solid #ccc;">
       <form id="chatForm" style="display: flex;flex-direction: column;">
         <label for="userInput">Ask me anything and I'll see what context is required to answer</label>
         <input type="text" id="userInput">
