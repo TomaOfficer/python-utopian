@@ -30,13 +30,23 @@
             <tr>
                 <th>Legal Name</th>
                 <th>Business Structure</th>
-                <!-- Add more headers as needed -->
+                <th>EIN</th>
+                <th>Business address</th>
+                <th>Nature of business</th>
+                <th>Owner(s) info</th>
+                <th>Governing law</th>
+                <th>Contact details</th>
             </tr>
             {% for restaurant in restaurants %}
                 <tr>
                     <td>{{ restaurant.legal_name }}</td>
                     <td>{{ restaurant.business_structure }}</td>
-                    <!-- Add more data fields as needed -->
+                    <td>{{ restaurant.ein }}</td>
+                    <td>{{ restaurant.business_address }}</td>
+                    <td>{{ restaurant.business_nature }}</td>
+                    <td>{{ restaurant.owner_info }}</td>
+                    <td>{{ restaurant.governing_law }}</td>
+                    <td>{{ restaurant.contact_details }}</td>
                 </tr>
             {% endfor %}
         </table>
