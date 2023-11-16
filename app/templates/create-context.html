@@ -21,6 +21,9 @@
         {{ form.contact_details.label }} {{ form.contact_details() }}
         {{ form.submit() }}
     </form>
+    {% if message %}
+        <div class="success-message">{{ message }}</div>
+    {% endif %}
     </section>
     <section style="padding:1em;border:1px solid #ccc;">
       <form id="chatForm" style="display: flex;flex-direction: column;">

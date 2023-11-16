@@ -1,6 +1,6 @@
 import os
 import openai
-from flask import Blueprint, request, session, redirect, url_for, jsonify
+from flask import Blueprint, request, session, redirect, url_for, jsonify, render_template
 from app.models import Restaurant, User
 from app.extensions import db
 from flask_login import current_user, login_required
@@ -36,7 +36,6 @@ def create_context():
 
         return jsonify(formatted_response)
 
-        return jsonify(formatted_response)
     except Exception as e:
         print("Error:", e)
         return jsonify({'error': str(e)}), 500
@@ -58,20 +57,20 @@ def add_restaurant():
     form = RestaurantForm()
     if form.validate_on_submit():
         restaurant = Restaurant(
-            legal_name=form.name.data,
-            business_address=form.address.data,
-            business_structure=form.corporate_entity_type.data,
+            legal_name=form.legal_name.data,
+            business_structure=form.business_structure.data,
+            ein=form.ein.data,
+            business_address=form.business_address.data,
+            business_nature=form.business_nature.data,
+            owner_info=form.owner_info.data,
+            governing_law=form.governing_law.data,
+            contact_details=form.contact_details.data,
             user_id=current_user.id  # Assuming Flask-Login is used for user management
         )
         # Add other fields as necessary
         db.session.add(restaurant)
         db.session.commit()
-        return redirect(url_for('context.restaurant_added_successfully')) 
-    return render_template('add_restaurant.html', form=form)
-
-@context_blueprint.route('/restaurant_added_successfully')
-@login_required
-def restaurant_added_successfully():
-    return render_template('create-context.html')
-
+        success_message = "Restaurant added successfully!"
+    
+    return render_template('create-context.html', form=form, message=success_message)
   
