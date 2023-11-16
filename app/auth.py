@@ -2,7 +2,7 @@ from flask import Blueprint, redirect, url_for, session, render_template
 from flask_login import login_user, logout_user, current_user, login_required
 from authlib.integrations.flask_client import OAuth
 from app.extensions import db
-from app.models import User
+from app.models import User, Restaurant
 from app.create_context import RestaurantForm
 
 auth_blueprint = Blueprint('auth', __name__)
@@ -70,7 +70,8 @@ def talk_to_assistant():
 @login_required
 def create_context():
     form = RestaurantForm() 
-    return render_template('create-context.html', form=form)
+    restaurants = Restaurant.query.filter_by(user_id=current_user.id).all()  # Fetch restaurants for the current user
+    return render_template('create-context.html', form=form, restaurants=restaurants)
 
 @auth_blueprint.route('/logout')
 def logout():

@@ -24,6 +24,25 @@
     {% if message %}
         <div class="success-message">{{ message }}</div>
     {% endif %}
+    <h2>Your Restaurants</h2>
+    {% if restaurants %}
+        <table>
+            <tr>
+                <th>Legal Name</th>
+                <th>Business Structure</th>
+                <!-- Add more headers as needed -->
+            </tr>
+            {% for restaurant in restaurants %}
+                <tr>
+                    <td>{{ restaurant.legal_name }}</td>
+                    <td>{{ restaurant.business_structure }}</td>
+                    <!-- Add more data fields as needed -->
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>No restaurants added yet.</p>
+    {% endif %}
     </section>
     <section style="padding:1em;border:1px solid #ccc;">
       <form id="chatForm" style="display: flex;flex-direction: column;">
