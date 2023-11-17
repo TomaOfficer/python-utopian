@@ -18,7 +18,6 @@ def create_app():
     def load_user(user_id):
         return User.query.get(user_id)
 
-    
     # Register blueprints or call init_app functions from your other modules here
     from app.auth import auth_blueprint
     from app.chatbot import chatbot_blueprint
