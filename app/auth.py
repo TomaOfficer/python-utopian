@@ -45,12 +45,12 @@ def authorized_github():
     user = User.query.filter_by(oauth_id=github_id, oauth_provider='github').first()
 
     if user is None:
-        new_user = User(oauth_id=github_id, oauth_provider='github')
-        db.session.add(new_user)
+        user = User(oauth_id=github_id, oauth_provider='github')
+        db.session.add(user)
         db.session.commit()
-        login_user(new_user)
-    else:
-        login_user(user)
+
+    login_user(user)
+    session['user_id'] = user.id  # Set the session variable here
 
     return redirect(url_for('auth.authorized_success'))
 
