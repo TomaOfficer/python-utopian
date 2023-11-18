@@ -9,24 +9,36 @@
   <div class="dashboard-home">
     <div class="dashboard-home__leftCol">
       <h5>Context</h5>
-      <form method="post" action="{{ url_for('travel.add_travel') }}">
+      <h5>Define Your Travel Plan</h5>
+      <form method="post" action="{{ url_for('travel.add_travel') }}" class="madlib-form">
         {{ form.hidden_tag() }}
 
-        {{ form.destination() }}
+        <p>
+          I'm planning a trip to 
+          {{ form.destination(class="madlib-input") }}.
+          I would like to go in the 
+          {{ form.season(class="madlib-input") }} season.
+        </p>
 
-        {{ form.season() }}
+        <p>
+          This trip is for 
+          {{ form.travelers(class="madlib-input") }} people.
+          Our travel preferences include 
+          {{ form.preferences(class="madlib-input") }},
+          and we prefer a 
+          {{ form.travel_style(class="madlib-input") }} travel style.
+        </p>
 
-        {{ form.travelers() }}
+        <p>
+          We're interested in exploring 
+          {{ form.interests(class="madlib-input") }}.
+          Our special requirements are 
+          {{ form.special_requirements(class="madlib-input") }}.
+        </p>
 
-        {{ form.preferences() }}
-
-        {{ form.travel_style() }}
-
-        {{ form.interests() }}
-
-        {{ form.special_requirements() }}
-
-        {{ form.submit() }}
+        <p>
+          {{ form.submit(class="madlib-submit") }}
+        </p>
       </form>
     </div>
     <div class="dashboard-home__rightCol">

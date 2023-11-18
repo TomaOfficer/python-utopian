@@ -19,3 +19,35 @@ nav {
 .dashboard-home__rightCol {
   flex-basis: 50%;
 }
+.madlib-form {
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+}
+
+.madlib-input {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 8px;
+  margin: 4px;
+  font-size: 16px;
+}
+.madlib-input:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+}
+
+.madlib-submit {
+  background-color: #007bff;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 18px;
+  margin-top: 20px;
+}
+
+.madlib-submit:hover {
+  background-color: #0056b3;
+}
