@@ -9,7 +9,7 @@
   <div class="dashboard-home">
     <div class="dashboard-home__leftCol">
       <h5>Context</h5>
-      <form method="post" action="">
+      <form method="post" action="{{ url_for('travel.add_travel') }}">
         {{ form.hidden_tag() }}
 
         {{ form.destination() }}

@@ -4,13 +4,14 @@ from flask import Blueprint, request, session, redirect, url_for, jsonify, rende
 from app.models import TravelPlan, User
 from flask_login import current_user, login_required
 from flask_wtf import FlaskForm
+from app.extensions import db
 from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired
 
 # Load environment variables and initialize OpenAI client
 openai.api_key = os.getenv('OPENAI_API_KEY')
 
-context_blueprint = Blueprint('context', __name__)
+travel_blueprint = Blueprint('travel', __name__)
 
 class TravelForm(FlaskForm):
     destination = StringField('Destination', validators=[DataRequired()])
@@ -22,7 +23,7 @@ class TravelForm(FlaskForm):
     special_requirements = StringField('Special Requirements', validators=[DataRequired()])
     submit = SubmitField('Submit')
 
-@context_blueprint.route('/add_travel', methods=['GET', 'POST'])
+@travel_blueprint.route('/add_travel', methods=['GET', 'POST'])
 @login_required
 def add_travel():
     form = TravelForm()
