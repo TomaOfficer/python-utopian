@@ -8,3 +8,14 @@ nav {
   flex-direction: row;
   justify-content: space-between;
 }
+.dashboard-home {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.dashboard-home__leftCol {
+  flex-basis: 50%;
+}
+.dashboard-home__rightCol {
+  flex-basis: 50%;
+}

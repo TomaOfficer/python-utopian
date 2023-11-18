@@ -1,12 +1,18 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Travel Page</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+  <title>Travel Page</title>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    {% include 'navbar.html' %}
-    <h1>Welcome to the Travel Page</h1>
-    <p>This is a basic HTML page for travel.</p>
+  {% include 'navbar.html' %}
+  <div class="dashboard-home">
+    <div class="dashboard-home__leftCol">
+      <h5>Context</h5>
+    </div>
+    <div class="dashboard-home__rightCol">
+      <h5>LLM</h5>
+    </div>
+  </div>
 </body>
 </html>
