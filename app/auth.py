@@ -3,8 +3,9 @@ from flask_login import login_user, logout_user, current_user, login_required
 from app.login_config import login_manager
 from authlib.integrations.flask_client import OAuth
 from app.extensions import db
-from app.models import User, Restaurant
+from app.models import User, Restaurant, TravelPlan
 from app.create_context import RestaurantForm
+from app.create_travel import TravelForm
 from app.app_factory import login_manager 
 import jwt
 import requests
@@ -175,9 +176,10 @@ def create_context():
 @auth_blueprint.route('/travel')
 @login_required
 def travel():
-    logging.info(f"Current User: {current_user}, Authenticated: {current_user.is_authenticated}")
-    logging.info(f"Session: {session}")
-    return render_template('travel.html')
+    form = TravelForm()
+    # logging.info(f"Current User: {current_user}, Authenticated: {current_user.is_authenticated}")
+    # logging.info(f"Session: {session}")
+    return render_template('travel.html', form=form)
 
 @auth_blueprint.route('/logout')
 def logout():

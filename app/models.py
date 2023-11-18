@@ -32,3 +32,19 @@ class Restaurant(db.Model):
 
     # Relationship to link back to the User model
     user = db.relationship('User', backref=db.backref('restaurants', lazy=True))
+
+class TravelPlan(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    destination = db.Column(db.String(100), nullable=False)
+    season = db.Column(db.String(100), nullable=False)
+    travelers = db.Column(db.String(200), nullable=False)
+    preferences = db.Column(db.String(400), nullable=False)
+    travel_style = db.Column(db.String(400), nullable=False)
+    interests = db.Column(db.String(500), nullable=False)
+    special_requirements = db.Column(db.String(300), nullable=False)
+
+    # Foreign key to link to the User model
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+
+    # Relationship to link back to the User model
+    user = db.relationship('User', backref=db.backref('travel_plans', lazy=True))

@@ -9,6 +9,25 @@
   <div class="dashboard-home">
     <div class="dashboard-home__leftCol">
       <h5>Context</h5>
+      <form method="post" action="">
+        {{ form.hidden_tag() }}
+
+        {{ form.destination() }}
+
+        {{ form.season() }}
+
+        {{ form.travelers() }}
+
+        {{ form.preferences() }}
+
+        {{ form.travel_style() }}
+
+        {{ form.interests() }}
+
+        {{ form.special_requirements() }}
+
+        {{ form.submit() }}
+      </form>
     </div>
     <div class="dashboard-home__rightCol">
       <h5>LLM</h5>
