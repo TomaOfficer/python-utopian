@@ -20,44 +20,44 @@
         {{ form.governing_law.label }} {{ form.governing_law() }}
         {{ form.contact_details.label }} {{ form.contact_details() }}
         {{ form.submit() }}
-    </form>
-    {% if message %}
-        <div class="success-message">{{ message }}</div>
-    {% endif %}
-    <h2>Your Restaurants</h2>
-    {% if restaurants %}
-        <table>
-            <tr>
-                <th>Legal Name</th>
-                <th>Business Structure</th>
-                <th>EIN</th>
-                <th>Business address</th>
-                <th>Nature of business</th>
-                <th>Owner(s) info</th>
-                <th>Governing law</th>
-                <th>Contact details</th>
-                <th></th>
-            </tr>
-            {% for restaurant in restaurants %}
-                <tr>
-                    <td>{{ restaurant.legal_name }}</td>
-                    <td>{{ restaurant.business_structure }}</td>
-                    <td>{{ restaurant.ein }}</td>
-                    <td>{{ restaurant.business_address }}</td>
-                    <td>{{ restaurant.business_nature }}</td>
-                    <td>{{ restaurant.owner_info }}</td>
-                    <td>{{ restaurant.governing_law }}</td>
-                    <td>{{ restaurant.contact_details }}</td>
-                    <td>
-                      <button class="use-restaurant" data-id="{{ restaurant.id }}">Use this Restaurant</button>
-                    </td>
-                </tr>
-            {% endfor %}
-        </table>
-    {% else %}
-        <p>No restaurants added yet.</p>
-    {% endif %}
-    <div id="restaurant-response"></div>
+      </form>
+      {% if message %}
+          <div class="success-message">{{ message }}</div>
+      {% endif %}
+      <h2>Your Restaurants</h2>
+      {% if restaurants %}
+          <table>
+              <tr>
+                  <th>Legal Name</th>
+                  <th>Business Structure</th>
+                  <th>EIN</th>
+                  <th>Business address</th>
+                  <th>Nature of business</th>
+                  <th>Owner(s) info</th>
+                  <th>Governing law</th>
+                  <th>Contact details</th>
+                  <th></th>
+              </tr>
+              {% for restaurant in restaurants %}
+                  <tr>
+                      <td>{{ restaurant.legal_name }}</td>
+                      <td>{{ restaurant.business_structure }}</td>
+                      <td>{{ restaurant.ein }}</td>
+                      <td>{{ restaurant.business_address }}</td>
+                      <td>{{ restaurant.business_nature }}</td>
+                      <td>{{ restaurant.owner_info }}</td>
+                      <td>{{ restaurant.governing_law }}</td>
+                      <td>{{ restaurant.contact_details }}</td>
+                      <td>
+                        <button class="use-restaurant" data-id="{{ restaurant.id }}">Use this Restaurant</button>
+                      </td>
+                  </tr>
+              {% endfor %}
+          </table>
+      {% else %}
+          <p>No restaurants added yet.</p>
+      {% endif %}
+      <div id="restaurant-response"></div>
     </section>
     <section style="padding:1em;border:1px solid #ccc;">
       <form id="chatForm" style="display: flex;flex-direction: column;">
