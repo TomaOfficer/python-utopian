@@ -179,7 +179,12 @@ def travel():
     form = TravelForm()
     # logging.info(f"Current User: {current_user}, Authenticated: {current_user.is_authenticated}")
     # logging.info(f"Session: {session}")
-    return render_template('travel.html', form=form)
+    existing_plan = TravelPlan.query.filter_by(user_id=current_user.id).first()
+    if existing_plan:
+        form = TravelForm(obj=existing_plan)
+    else:
+        form = TravelForm()
+    return render_template('travel.html', form=form, existing_plan=existing_plan)
 
 @auth_blueprint.route('/logout')
 def logout():
