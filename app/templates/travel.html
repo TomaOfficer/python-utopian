@@ -37,7 +37,7 @@
         </p>
 
         <p>
-          {{ form.submit(class="madlib-submit") }}
+          {{ form.submit(class="madlib-submit", disabled=true) }}
         </p>
       </form>
     </div>
@@ -45,5 +45,16 @@
       <h5>LLM</h5>
     </div>
   </div>
+  <script>
+    // Function to enable the submit button
+    function enableSubmitButton() {
+        document.querySelector('.madlib-submit').disabled = false;
+    }
+
+    // Add change event listeners to all input fields
+    document.querySelectorAll('.madlib-input').forEach(function(input) {
+        input.addEventListener('change', enableSubmitButton);
+    });
+  </script>
 </body>
 </html>
