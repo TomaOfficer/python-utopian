@@ -1,13 +1,15 @@
 from flask import Blueprint, redirect, url_for, session, render_template, current_app
 from flask_login import login_user, logout_user, current_user, login_required
+from app.login_config import login_manager
 from authlib.integrations.flask_client import OAuth
 from app.extensions import db
 from app.models import User, Restaurant
 from app.create_context import RestaurantForm
+from app.app_factory import login_manager 
 import jwt
 import requests
 import secrets
-
+import logging
 
 auth_blueprint = Blueprint('auth', __name__)
 
@@ -169,6 +171,13 @@ def create_context():
     form = RestaurantForm() 
     restaurants = Restaurant.query.filter_by(user_id=current_user.id).all()  # Fetch restaurants for the current user
     return render_template('create-context.html', form=form, restaurants=restaurants)
+
+@auth_blueprint.route('/travel')
+@login_required
+def travel():
+    logging.info(f"Current User: {current_user}, Authenticated: {current_user.is_authenticated}")
+    logging.info(f"Session: {session}")
+    return render_template('travel.html')
 
 @auth_blueprint.route('/logout')
 def logout():
