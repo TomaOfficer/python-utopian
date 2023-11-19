@@ -72,3 +72,35 @@ def add_travel():
         db.session.commit()
 
     return render_template('travel.html', form=form, message=success_message)
+
+@travel_blueprint.route('/create_itinerary', methods=['POST'])
+@login_required
+def create_itinerary():
+    try:
+        # Retrieve the user's travel plan
+        travel_plan = TravelPlan.query.filter_by(user_id=current_user.id).first()
+
+        # Build the prompt
+        prompt = f"I'm planning a trip to {travel_plan.destination} in {travel_plan.season} with {travel_plan.travelers} people. " \
+                 f"I'm looking for a {travel_plan.preferences} trip, and my travel style is {travel_plan.travel_style}. " \
+                 f"I'm interested in {travel_plan.interests}. " \
+                 f"I have the following special requirements: {travel_plan.special_requirements}. " \
+                 f"Can you help me plan my itinerary?"
+
+        # Call the OpenAI API
+        response = openai.chat.completions.create(
+            model="gpt-4-1106-preview",
+            temperature=0.1,
+            messages=[
+                {"role": "system", "content": "You are a knowledgeable assistant providing travel advice."},
+                {"role": "user", "content": prompt},
+            ]
+        )
+
+        # Parsing the response to extract context requirements
+        chat_response = response.choices[0].message.content if response.choices else "No response received."
+        return jsonify({'response': chat_response})
+
+    except Exception as e:
+        print("Error:", e)
+        return jsonify({'error': str(e)}), 500

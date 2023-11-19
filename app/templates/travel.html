@@ -2,6 +2,7 @@
 <html>
 <head>
   <title>Travel Page</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
@@ -42,7 +43,9 @@
       </form>
     </div>
     <div class="dashboard-home__rightCol">
-      <h5>LLM</h5>
+      <h5>LLM Actions</h5>
+      <button class="create-itinerary">Create itinerary</button>
+      <div id="itinerary_response"></div>
     </div>
   </div>
   <script>
@@ -54,6 +57,19 @@
     // Add change event listeners to all input fields
     document.querySelectorAll('.madlib-input').forEach(function(input) {
         input.addEventListener('change', enableSubmitButton);
+    });
+
+    $(document).ready(function(){
+      $(".create-itinerary").click(function(){
+          
+          $.post("/travel/create_itinerary", function(data){
+            if(data.response) {
+                $("#itinerary_response").html(data.response); 
+            } else if(data.error) {
+                $("#itinerary_response").html("Error: " + data.error);
+            }
+          });
+      });
     });
   </script>
 </body>
